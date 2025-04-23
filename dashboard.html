@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم – Gasco</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand-primary: #f6d55c;
+      --brand-secondary: #007BFF;
+      --brand-orange-dark: #ff6f00;
+      --brand-orange-hover: #e65100;
+      --background-dark: #1C2526;
+      --background-light: #2A3435;
+      --text-dark: #d3d3d3;
+      --text-light: #ffffff;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--background-dark);
+      color: var(--text-light);
+      margin: 0;
+      direction: rtl;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* النَبَر */
+    header {
+      background-color: var(--background-light);
+      padding: 20px 40px;
+      border-bottom: 2px solid var(--brand-primary);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo-img {
+      max-width: 100px;
+      height: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--brand-primary);
+      background-color: transparent;
+      padding: 8px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .nav-link:hover {
+      background-color: var(--brand-orange-dark);
+      color: var(--text-light);
+    }
+
+    #languageSwitcher {
+      display: flex;
+      gap: 10px;
+    }
+
+    .lang-btn {
+      padding: 8px 16px;
+      background-color: var(--background-light);
+      border: 2px solid var(--brand-primary);
+      color: var(--text-light);
+      font-weight: bold;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s, transform 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .lang-btn:hover, .lang-btn.active {
+      background-color: var(--brand-orange-dark);
+      color: var(--text-light);
+      transform: scale(1.05);
+    }
+
+    /* تصميم الكارد */
+    .card {
+      background: linear-gradient(145deg, var(--background-light), var(--background-dark));
+      border: 2px solid var(--brand-primary);
+      border-radius: 15px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(246, 213, 92, 0.3);
+    }
+
+    .card a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      transition: color 0.3s;
+    }
+
+    .card a i {
+      margin-right: 10px;
+      color: var(--brand-primary);
+    }
+
+    .card a:hover {
+      color: var(--brand-orange-dark);
+    }
+
+    /* محتوى الصفحة */
+    .content {
+      padding: 40px;
+      flex: 1;
+    }
+
+    /* العنوان */
+    h1 {
+      color: var(--brand-primary);
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    p {
+      color: var(--text-light);
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    /* تنسيق الصفحة */
+    .main-container {
+      padding: 40px;
+      flex: 1;
+    }
+
+    .options-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .option-card {
+      flex: 0 0 200px; /* عرض ثابت للكارد */
+    }
+
+    /* رسالة عدم السماح */
+    .not-allowed {
+      display: none;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .not-allowed h2 {
+      color: var(--brand-orange-dark);
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .not-allowed p {
+      font-size: 1.2rem;
+    }
+
+    .not-allowed a {
+      color: var(--brand-primary);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    .not-allowed a:hover {
+      color: var(--brand-orange-dark);
+    }
+
+    .countdown {
+      color: var(--brand-primary);
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- النَبَر -->
+  <header>
+    <div class="nav-links d-flex align-items-center">
+      <img src="image/logo.jpg" alt="Gasco Logo" class="logo-img me-3">
+      <a href="home.html" class="nav-link" id="productsLink">الرئيسية</a>
+      <a href="product.html" class="nav-link" id="ourProductsLink">منتجاتنا</a>
+    </div>
+    <div id="languageSwitcher" class="d-flex align-items-center">
+      <button onclick="setLanguage('ar')" class="lang-btn me-2" id="btnArabic">العربية</button>
+      <button onclick="setLanguage('en')" class="lang-btn" id="btnEnglish">English</button>
+    </div>
+  </header>
+
+  <!-- رسالة عدم السماح -->
+  <div class="not-allowed" id="notAllowedMessage">
+    <h2 id="notAllowedTitle">غير مسموح</h2>
+    <p id="notAllowedText">هذه الصفحة متاحة فقط للإدارة. إذا كنت تعتقد أن هذا خطأ، يرجى التواصل مع الدعم.</p>
+    <p><a href="home.html" id="backToHome">العودة إلى الصفحة الرئيسية</a></p>
+    <p class="countdown" id="countdownText">سيتم توجيهك إلى الصفحة الرئيسية خلال <span id="countdown">5</span> ثوانٍ...</p>
+  </div>
+
+  <!-- المحتوى -->
+  <div class="main-container" id="dashboardContent">
+    <div class="content">
+      <h1 id="welcomeMessage">مرحبًا بك في لوحة التحكم</h1>
+      <p id="selectMessage">اختر خيارًا لإضافة أو إدارة المنتجات.</p>
+      <div class="options-row">
+        <div class="option-card">
+          <div class="card">
+            <a href="microwave.html">
+              <i class="fas fa-microwave"></i>
+              <span id="optionMicrowave">مايكروويف</span>
+            </a>
+          </div>
+        </div>
+        <div class="option-card">
+          <div class="card">
+            <a href="stove.html">
+              <i class="fas fa-fire"></i>
+              <span id="optionStove">بوتاجاز</span>
+            </a>
+          </div>
+        </div>
+        <div class="option-card">
+          <div class="card">
+            <a href="products.html">
+              <i class="fas fa-box"></i>
+              <span id="optionAllProducts">جميع المنتجات</span>
+            </a>
+          </div>
+        </div>
+        <div class="option-card">
+          <div class="card">
+            <a href="orders-list.html">
+              <i class="fas fa-shopping-bag"></i>
+              <span id="optionOrders">الطلبات</span>
+            </a>
+          </div>
+        </div>
+        <div class="option-card">
+          <div class="card">
+            <a href="#" onclick="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              <span id="optionLogout">تسجيل الخروج</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // ترجمات اللغة
+    const translations = {
+      ar: {
+        title: "لوحة التحكم - Gasco",
+        productsLink: "الرئيسية",
+        ourProductsLink: "منتجاتنا",
+        optionMicrowave: "مايكروويف",
+        optionStove: "بوتاجاز",
+        optionAllProducts: "جميع المنتجات",
+        optionOrders: "الطلبات",
+        optionLogout: "تسجيل الخروج",
+        welcomeMessage: "مرحبًا بك في لوحة التحكم",
+        selectMessage: "اختر خيارًا لإضافة أو إدارة المنتجات.",
+        notAllowedTitle: "غير مسموح",
+        notAllowedText: "هذه الصفحة متاحة فقط للإدارة. إذا كنت تعتقد أن هذا خطأ، يرجى التواصل مع الدعم.",
+        backToHome: "العودة إلى الصفحة الرئيسية",
+        countdownText: "سيتم توجيهك إلى الصفحة الرئيسية خلال {seconds} ثوانٍ..."
+      },
+      en: {
+        title: "Dashboard - Gasco",
+        productsLink: "Home",
+        ourProductsLink: "Our Products",
+        optionMicrowave: "Microwave",
+        optionStove: "Stove",
+        optionAllProducts: "All Products",
+        optionOrders: "Orders",
+        optionLogout: "Logout",
+        welcomeMessage: "Welcome to Admin Dashboard",
+        selectMessage: "Select an option to add or manage products.",
+        notAllowedTitle: "Not Allowed",
+        notAllowedText: "This page is only accessible to admins. If you think this is an error, please contact support.",
+        backToHome: "Back to Home",
+        countdownText: "You will be redirected to the home page in {seconds} seconds..."
+      }
+    };
+
+    // تحديث النصوص بناءً على اللغة
+    function setLanguage(lang) {
+      localStorage.setItem('lang', lang);
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+      document.title = translations[lang].title;
+
+      document.getElementById('productsLink').textContent = translations[lang].productsLink;
+      document.getElementById('ourProductsLink').textContent = translations[lang].ourProductsLink;
+      document.getElementById('optionMicrowave').textContent = translations[lang].optionMicrowave;
+      document.getElementById('optionStove').textContent = translations[lang].optionStove;
+      document.getElementById('optionAllProducts').textContent = translations[lang].optionAllProducts;
+      document.getElementById('optionOrders').textContent = translations[lang].optionOrders;
+      document.getElementById('optionLogout').textContent = translations[lang].optionLogout;
+      document.getElementById('welcomeMessage').textContent = translations[lang].welcomeMessage;
+      document.getElementById('selectMessage').textContent = translations[lang].selectMessage;
+      document.getElementById('notAllowedTitle').textContent = translations[lang].notAllowedTitle;
+      document.getElementById('notAllowedText').textContent = translations[lang].notAllowedText;
+      document.getElementById('backToHome').textContent = translations[lang].backToHome;
+
+      const countdownElement = document.getElementById('countdown');
+      const countdownTextElement = document.getElementById('countdownText');
+      if (countdownElement && countdownTextElement) {
+        const seconds = countdownElement.textContent;
+        countdownTextElement.textContent = translations[lang].countdownText.replace('{seconds}', seconds);
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      if (lang === 'ar') {
+        document.getElementById('btnArabic').classList.add('active');
+      } else {
+        document.getElementById('btnEnglish').classList.add('active');
+      }
+    }
+
+    // دالة تسجيل الخروج
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('cart');
+      window.location.href = 'login.html';
+    }
+
+    // دالة بدء العداد للتوجيه التلقائي
+    function startRedirectCountdown() {
+      const countdownElement = document.getElementById('countdown');
+      const countdownTextElement = document.getElementById('countdownText');
+      if (!countdownElement || !countdownTextElement) {
+        console.error('عناصر العداد غير موجودة في DOM');
+        window.location.href = 'home.html';
+        return;
+      }
+
+      let seconds = 5;
+      const lang = localStorage.getItem('lang') || 'ar';
+
+      countdownElement.textContent = seconds;
+      countdownTextElement.textContent = translations[lang].countdownText.replace('{seconds}', seconds);
+
+      const countdownInterval = setInterval(() => {
+        seconds--;
+        countdownElement.textContent = seconds;
+        countdownTextElement.textContent = translations[lang].countdownText.replace('{seconds}', seconds);
+
+        if (seconds <= 0) {
+          clearInterval(countdownInterval);
+          window.location.href = 'home.html';
+        }
+      }, 1000);
+    }
+
+    // التحقق من دور المستخدم
+    function checkUserRole() {
+      const token = localStorage.getItem('token');
+      const userRole = localStorage.getItem('userRole');
+      const dashboardContent = document.getElementById('dashboardContent');
+      const notAllowedMessage = document.getElementById('notAllowedMessage');
+
+      // التحقق من وجود التوكن
+      if (!token) {
+        console.log('لا يوجد توكن في localStorage، يتم التوجيه إلى صفحة تسجيل الدخول.');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      console.log('التوكن المستخدم:', token);
+      console.log('دور المستخدم المخزن:', userRole);
+
+      // التحقق من دور المستخدم
+      if (userRole && userRole.toLowerCase() === 'admin') {
+        console.log('المستخدم هو admin، يتم عرض لوحة التحكم.');
+        dashboardContent.style.display = 'block';
+        notAllowedMessage.style.display = 'none';
+      } else {
+        console.log('المستخدم ليس admin، يتم إظهار رسالة عدم السماح.');
+        dashboardContent.style.display = 'none';
+        notAllowedMessage.style.display = 'block';
+        startRedirectCountdown();
+      }
+    }
+
+    // تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedLang = localStorage.getItem('lang') || 'ar';
+      setLanguage(savedLang);
+      checkUserRole();
+    });
+  </script>
+</body>
+</html>

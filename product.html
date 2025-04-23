@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>جميع المنتجات – Gasco</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand-primary: #f6d55c;
+      --brand-secondary: #007BFF;
+      --brand-orange-dark: #ff6f00;
+      --brand-orange-hover: #e65100;
+      --background-dark: #1C2526;
+      --background-light: #2A3435;
+      --text-dark: #d3d3d3;
+      --text-light: #ffffff;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--background-dark);
+      color: var(--text-light);
+      margin: 0;
+      direction: rtl;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* النَبَر */
+    header {
+      background-color: var(--background-light);
+      padding: 20px 40px;
+      border-bottom: 2px solid var(--brand-primary);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo-img {
+      max-width: 100px;
+      height: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--brand-primary);
+      background-color: transparent;
+      padding: 8px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .nav-link:hover {
+      background-color: var(--brand-orange-dark);
+      color: var(--text-light);
+    }
+
+    #languageSwitcher {
+      display: flex;
+      gap: 10px;
+    }
+
+    .lang-btn {
+      padding: 8px 16px;
+      background-color: var(--background-light);
+      border: 2px solid var(--brand-primary);
+      color: var(--text-light);
+      font-weight: bold;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s, transform 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .lang-btn:hover, .lang-btn.active {
+      background-color: var(--brand-orange-dark);
+      color: var(--text-light);
+      transform: scale(1.05);
+    }
+
+    /* أيقونة السلة */
+    .cart-icon-container {
+      position: relative;
+      margin-left: 15px;
+    }
+
+    .cart-icon {
+      font-size: 1.8rem;
+      color: var(--brand-primary);
+      cursor: pointer;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .cart-icon:hover {
+      color: var(--brand-orange-dark);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: var(--brand-orange-dark);
+      color: var(--text-light);
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: .75rem;
+      border: 1px solid var(--background-dark);
+    }
+
+    /* أيقونة القائمة الجانبية */
+    .menu-icon {
+      font-size: 1.8rem;
+      color: var(--brand-primary);
+      cursor: pointer;
+      margin-left: 15px;
+      transition: color 0.3s;
+    }
+
+    .menu-icon:hover {
+      color: var(--brand-orange-dark);
+    }
+
+    /* القائمة الجانبية */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: var(--background-light);
+      border-right: 2px solid var(--brand-primary);
+      transition: left 0.3s ease;
+      z-index: 2000;
+    }
+
+    .sidebar.active {
+      left: 0;
+    }
+
+    .sidebar .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 1.5rem;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .sidebar .close-btn:hover {
+      color: var(--brand-orange-dark);
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 20px;
+      margin-top: 60px;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 20px;
+    }
+
+    .sidebar ul li a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      transition: color 0.3s;
+    }
+
+    .sidebar ul li a i {
+      margin-right: 10px;
+      color: var(--brand-primary);
+    }
+
+    .sidebar ul li a:hover {
+      color: var(--brand-orange-dark);
+    }
+
+    /* أيقونات واتساب وفيسبوك */
+    .dropdown-item {
+      text-align: center; /* توسيط الأيقونات */
+    }
+
+    .dropdown-item i {
+      color: var(--brand-primary);
+      transition: color 0.3s;
+      font-size: 24px; /* تكبير حجم الأيقونات */
+    }
+
+    .dropdown-item:hover i {
+      color: var(--brand-orange-dark);
+    }
+
+    /* تخطيط الصفحة */
+    .main-container {
+      display: flex;
+      gap: 20px;
+      padding: 20px 40px;
+    }
+
+    .products-section {
+      flex: 1;
+    }
+
+    /* تصميم الفلتر (عمود جانبي) */
+    .filter-sidebar {
+      width: 300px;
+      background: var(--background-light);
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px solid var(--brand-primary);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      position: sticky;
+      top: 100px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .filter-sidebar .form-label {
+      color: var(--text-light);
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .filter-sidebar .form-select,
+    .filter-sidebar .form-control {
+      background-color: var(--background-dark);
+      color: var(--text-light);
+      border: 1px solid var(--brand-primary);
+      border-radius: 10px;
+      margin-bottom: 15px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      width: 100%;
+    }
+
+    .filter-sidebar .form-select:focus,
+    .filter-sidebar .form-control:focus {
+      border-color: var(--brand-orange-dark);
+      box-shadow: 0 0 5px rgba(255, 111, 0, 0.5);
+    }
+
+    .filter-sidebar .btn-primary {
+      background: linear-gradient(45deg, var(--brand-orange-dark), var(--brand-primary));
+      border: none;
+      border-radius: 20px;
+      padding: 10px;
+      width: 100%;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .filter-sidebar .btn-primary:hover {
+      background: linear-gradient(45deg, var(--brand-orange-hover), var(--brand-primary));
+      transform: scale(1.05);
+    }
+
+    /* التأكد من أن الحقول مكدسة أسفل بعضها */
+    #stoveFilters,
+    #microFilters {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    /* تصميم الكاردات */
+    .card {
+      background: linear-gradient(145deg, var(--background-light), var(--background-dark));
+      border: 2px solid var(--brand-primary);
+      border-radius: 15px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(246, 213, 92, 0.3);
+    }
+
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 2px solid var(--brand-primary);
+      transition: transform 0.3s;
+    }
+
+    .card:hover .card-img-top {
+      transform: scale(1.05);
+    }
+
+    .card-body {
+      padding: 15px;
+      text-align: center;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      color: var(--text-light);
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .card-text {
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .card-text strong {
+      color: var(--brand-primary);
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, var(--brand-secondary), var(--brand-primary));
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(45deg, var(--brand-orange-dark), var(--brand-primary));
+      transform: scale(1.05);
+    }
+
+    /* العنوان */
+    h2 {
+      color: var(--brand-primary);
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <!-- النَبَر -->
+  <header>
+    <div class="nav-links d-flex align-items-center">
+      <img src="image/logo.jpg" alt="Gasco Logo" class="logo-img me-3">
+      <a href="home.html" class="nav-link" id="productsLink">الرئيسية</a>
+      <a href="about.html" class="nav-link" id="aboutLink">من نحن</a>
+      <div class="dropdown">
+        <a class="dropdown-toggle nav-link" href="#" id="contactDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          اتصل بنا
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="contactDropdown">
+          <li><a class="dropdown-item" href="https://wa.me/+201004677289"><i class="fab fa-whatsapp"></i></a></li>
+          <li><a class="dropdown-item" href="https://www.facebook.com/share/1FRvMibc6z/"><i class="fab fa-facebook"></i></a></li>
+        </ul>
+      </div>
+      <!-- أيقونة السلة -->
+      <div class="cart-icon-container">
+        <div class="cart-icon" onclick="location.href='cart.html'">
+          <i class="fas fa-shopping-cart"></i>
+          <span id="cartCount" class="cart-count" style="display:none;">0</span>
+        </div>
+      </div>
+      <!-- أيقونة القائمة الجانبية -->
+      <div class="menu-icon" onclick="toggleSidebar()">
+        <i class="fas fa-user-circle"></i>
+      </div>
+    </div>
+    <div id="languageSwitcher" class="d-flex align-items-center">
+      <button onclick="setLanguage('ar')" class="lang-btn me-2" id="btnArabic">العربية</button>
+      <button onclick="setLanguage('en')" class="lang-btn" id="btnEnglish">English</button>
+    </div>
+  </header>
+
+  <!-- القائمة الجانبية -->
+  <div class="sidebar" id="sidebar">
+    <span class="close-btn" onclick="toggleSidebar()">×</span>
+    <ul>
+      <li><a href="account.html"><i class="fas fa-user"></i> <span id="sidebarAccount">حسابي</span></a></li>
+      <li><a href="orders.html"><i class="fas fa-shopping-bag"></i> <span id="sidebarOrders">طلباتي</span></a></li>
+      <li id="dashboardLink"><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> <span id="sidebarDashboard">لوحة التحكم</span></a></li>
+      <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> <span id="sidebarLogout">تسجيل الخروج</span></a></li>
+    </ul>
+  </div>
+
+  <div class="main-container">
+    <!-- الفلتر (عمود جانبي) -->
+    <div class="filter-sidebar">
+      <form id="filterForm">
+        <div class="mb-3">
+          <label class="form-label" id="categoryLabel">التصنيف</label>
+          <select id="filterCategory" class="form-select">
+            <option value="">الكل</option>
+          </select>
+        </div>
+        <div id="stoveFilters" style="display:none;">
+          <div class="mb-3">
+            <label class="form-label" id="typeLabel">النوع</label>
+            <select id="filterType" class="form-select"></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" id="energyTypeLabel">نوع الطاقة</label>
+            <select id="filterEnergyType" class="form-select"></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" id="burnersLabel">عدد الشعلات</label>
+            <select id="filterNumberOfBurners" class="form-select"></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" id="safetyLabel">ميزة الأمان</label>
+            <select id="filterSafetyFeature" class="form-select"></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" id="materialLabel">الخامة</label>
+            <select id="filterMaterial" class="form-select"></select>
+          </div>
+        </div>
+        <div id="microFilters" style="display:none;">
+          <div class="mb-3">
+            <label class="form-label" id="capacityLabel">السعة</label>
+            <select id="filterCapacity" class="form-select"></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" id="controlTypeLabel">نوع التحكم</label>
+            <select id="filterControlType" class="form-select"></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" id="grillLabel">وظيفة الشواية</label>
+            <select id="filterHasGrillFunction" class="form-select">
+              <option value="">الكل</option>
+              <option value="true">نعم</option>
+              <option value="false">لا</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" id="priceMinLabel">سعر أدنى</label>
+          <input type="number" id="filterPriceMin" class="form-control" placeholder="0" min="0">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" id="priceMaxLabel">سعر أقصى</label>
+          <input type="number" id="filterPriceMax" class="form-control" placeholder="20000" min="0">
+        </div>
+        <button type="button" id="applyFilter" class="btn btn-primary">تطبيق الفلتر</button>
+      </form>
+    </div>
+
+    <!-- قسم المنتجات -->
+    <div class="products-section">
+      <h2 class="mb-4 text-center" id="pageTitle">جميع المنتجات</h2>
+      <!-- Products Grid -->
+      <div class="row" id="productsContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    // ترجمات اللغة
+    const translations = {
+      ar: {
+        title: "جميع المنتجات - Gasco",
+        productsLink: "الرئيسية",
+        aboutLink: "من نحن",
+        contactDropdown: "اتصل بنا",
+        pageTitle: "جميع المنتجات",
+        categoryLabel: "التصنيف",
+        typeLabel: "النوع",
+        energyTypeLabel: "نوع الطاقة",
+        burnersLabel: "عدد الشعلات",
+        safetyLabel: "ميزة الأمان",
+        materialLabel: "الخامة",
+        capacityLabel: "السعة",
+        controlTypeLabel: "نوع التحكم",
+        grillLabel: "وظيفة الشواية",
+        priceMinLabel: "سعر أدنى",
+        priceMaxLabel: "سعر أقصى",
+        applyFilter: "تطبيق الفلتر",
+        detailsBtn: "التفاصيل",
+        sidebarAccount: "حسابي",
+        sidebarOrders: "طلباتي",
+        sidebarDashboard: "لوحة التحكم",
+        sidebarLogout: "تسجيل الخروج",
+        grillYes: "نعم",
+        grillNo: "لا",
+        allOption: "الكل"
+      },
+      en: {
+        title: "All Products - Gasco",
+        productsLink: "Home",
+        aboutLink: "About Us",
+        contactDropdown: "Contact Us",
+        pageTitle: "All Products",
+        categoryLabel: "Category",
+        typeLabel: "Type",
+        energyTypeLabel: "Energy Type",
+        burnersLabel: "Number of Burners",
+        safetyLabel: "Safety Feature",
+        materialLabel: "Material",
+        capacityLabel: "Capacity",
+        controlTypeLabel: "Control Type",
+        grillLabel: "Grill Function",
+        priceMinLabel: "Min Price",
+        priceMaxLabel: "Max Price",
+        applyFilter: "Apply Filter",
+        detailsBtn: "Details",
+        sidebarAccount: "My Account",
+        sidebarOrders: "My Orders",
+        sidebarDashboard: "Dashboard",
+        sidebarLogout: "Logout",
+        grillYes: "Yes",
+        grillNo: "No",
+        allOption: "All"
+      }
+    };
+
+    function setLanguage(lang) {
+      localStorage.setItem('lang', lang);
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+      document.title = translations[lang].title;
+
+      document.getElementById('productsLink').textContent = translations[lang].productsLink;
+      document.getElementById('aboutLink').textContent = translations[lang].aboutLink;
+      document.getElementById('contactDropdown').textContent = translations[lang].contactDropdown;
+      document.getElementById('pageTitle').textContent = translations[lang].pageTitle;
+      document.getElementById('categoryLabel').textContent = translations[lang].categoryLabel;
+      document.getElementById('typeLabel').textContent = translations[lang].typeLabel;
+      document.getElementById('energyTypeLabel').textContent = translations[lang].energyTypeLabel;
+      document.getElementById('burnersLabel').textContent = translations[lang].burnersLabel;
+      document.getElementById('safetyLabel').textContent = translations[lang].safetyLabel;
+      document.getElementById('materialLabel').textContent = translations[lang].materialLabel;
+      document.getElementById('capacityLabel').textContent = translations[lang].capacityLabel;
+      document.getElementById('controlTypeLabel').textContent = translations[lang].controlTypeLabel;
+      document.getElementById('grillLabel').textContent = translations[lang].grillLabel;
+      document.getElementById('priceMinLabel').textContent = translations[lang].priceMinLabel;
+      document.getElementById('priceMaxLabel').textContent = translations[lang].priceMaxLabel;
+      document.getElementById('applyFilter').textContent = translations[lang].applyFilter;
+      document.getElementById('sidebarAccount').textContent = translations[lang].sidebarAccount;
+      document.getElementById('sidebarOrders').textContent = translations[lang].sidebarOrders;
+      document.getElementById('sidebarDashboard').textContent = translations[lang].sidebarDashboard;
+      document.getElementById('sidebarLogout').textContent = translations[lang].sidebarLogout;
+
+      const grillSelect = document.getElementById('filterHasGrillFunction');
+      grillSelect.innerHTML = `
+        <option value="">${translations[lang].allOption}</option>
+        <option value="true">${translations[lang].grillYes}</option>
+        <option value="false">${translations[lang].grillNo}</option>
+      `;
+
+      const categorySelect = document.getElementById('filterCategory');
+      const firstOption = categorySelect.options[0];
+      firstOption.text = translations[lang].allOption;
+
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      if (lang === 'ar') {
+        document.getElementById('btnArabic').classList.add('active');
+      } else {
+        document.getElementById('btnEnglish').classList.add('active');
+      }
+
+      // إعادة تحميل المنتجات لتحديث نصوص الأزرار
+      loadProducts();
+    }
+
+    // دالة للتحقق من دور المستخدم وإخفاء رابط لوحة التحكم إذا لم يكن admin
+    function checkUserRoleAndHideDashboard() {
+      const userRole = localStorage.getItem('userRole');
+      const dashboardLink = document.getElementById('dashboardLink');
+
+      if (!userRole || userRole.toLowerCase() !== 'admin') {
+        dashboardLink.style.display = 'none';
+      } else {
+        dashboardLink.style.display = 'block';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedLang = localStorage.getItem('lang') || 'ar';
+      setLanguage(savedLang);
+      checkUserRoleAndHideDashboard();
+      loadOptions().then(() => loadProducts());
+    });
+
+    // التحكم في القائمة الجانبية
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('active');
+    }
+
+    // تحديث عداد السلة
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const count = cart.reduce((sum, it) => sum + (it.quantity||1), 0);
+      const el = document.getElementById('cartCount');
+      el.textContent = count;
+      el.style.display = count>0? 'inline-block':'none';
+    }
+    updateCartCount();
+
+    const API_BASE = 'https://gasco.vercel.app/product';
+    const optsURL = API_BASE + '/options/dev';
+    const catSel = document.getElementById('filterCategory');
+    const stoveF = document.getElementById('stoveFilters');
+    const microF = document.getElementById('microFilters');
+
+    // load filter options
+    async function loadOptions() {
+      const res = await fetch(optsURL);
+      const js = await res.json(); if(!js.success) return;
+      const d = js.data;
+      fillSelect(catSel, d.categories, translations[localStorage.getItem('lang') || 'ar'].allOption);
+      fillSelect(document.getElementById('filterType'), d.stoveTypes);
+      fillSelect(document.getElementById('filterEnergyType'), d.energyTypes);
+      fillSelect(document.getElementById('filterNumberOfBurners'), Array.from(new Set(d.stoveTypes.map(_=>null))), '');
+      // burners options: generate from data? use 2-6
+      [2,3,4,5,6].forEach(n=> document.getElementById('filterNumberOfBurners').append(new Option(n,n)));
+      fillSelect(document.getElementById('filterSafetyFeature'), d.safetyLevels);
+      fillSelect(document.getElementById('filterMaterial'), d.stoveMaterials);
+      fillSelect(document.getElementById('filterCapacity'), d.microwaveCapacities);
+      fillSelect(document.getElementById('filterControlType'), d.microwaveControlTypes);
+    }
+    function fillSelect(sel, arr, first=''){
+      sel.innerHTML = '';
+      if(first!=='') sel.add(new Option(first, ''));
+      arr.forEach(v=> sel.add(new Option(v,v)));
+    }
+    // handle category change
+    catSel.onchange = ()=>{
+      const c = catSel.value;
+      stoveF.style.display = c==='Stove'? 'block':'none';
+      microF.style.display = c==='Microwave'? 'block':'none';
+    };
+
+    // apply filter
+    document.getElementById('applyFilter').onclick = ()=>{
+      const q = {};
+      const c = catSel.value; if(c) q.category = c;
+      if(c==='Stove'){
+        ['Type','EnergyType','NumberOfBurners','SafetyFeature','Material']
+          .forEach(f=>{ const v = document.getElementById('filter'+f).value; if(v) q[f.charAt(0).toLowerCase()+f.slice(1)] = v; });
+      }
+      if(c==='Microwave'){
+        ['Capacity','ControlType','HasGrillFunction']
+          .forEach(f=>{ const v = document.getElementById('filter'+f).value; if(v) q[f.charAt(0).toLowerCase()+f.slice(1)] = v; });
+      }
+      const min = document.getElementById('filterPriceMin').value;
+      const max = document.getElementById('filterPriceMax').value;
+      if(min) q.priceMin = min;
+      if(max) q.priceMax = max;
+      loadProducts(q);
+    };
+
+    // load products either with filter object or all
+    async function loadProducts(filterObj={}){
+      document.getElementById('productsContainer').innerHTML = '';
+      const params = new URLSearchParams(filterObj).toString();
+      const url = API_BASE + (params? '?'+params:'');
+      try{
+        const res = await fetch(url);
+        const js = await res.json(); if(!js.success) return;
+        js.data.forEach(p=>{
+          const img = p.Image?.secure_url || 'https://via.placeholder.com/300x200';
+          const div = document.createElement('div');
+          div.className = 'col-md-4 mb-4';
+          div.innerHTML = `
+            <div class="card h-100">
+              <img src="${img}" class="card-img-top" style="height:200px;object-fit:cover;" />
+              <div class="card-body">
+                <h5 class="card-title">${p.name}</h5>
+                <p class="card-text">${p.category}</p>
+                <p class="card-text">${p.category==='Stove'? p.type+', '+p.energyType : p.capacity}</p>
+                <p class="card-text"><strong>EGP ${p.price}</strong></p>
+                <a href="product-details.html?id=${p._id}" class="btn btn-primary" id="detailsBtn">${translations[localStorage.getItem('lang') || 'ar'].detailsBtn}</a>
+              </div>
+            </div>
+          `;
+          document.getElementById('productsContainer').appendChild(div);
+        });
+      }catch(e){ console.error(e); }
+      updateCartCount();
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

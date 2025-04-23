@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إضافة بوتاجاز – Gasco</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand-primary: #f6d55c;
+      --brand-secondary: #007BFF;
+      --brand-orange-dark: #ff6f00;
+      --brand-orange-hover: #e65100;
+      --background-dark: #1C2526;
+      --background-light: #2A3435;
+      --text-dark: #d3d3d3;
+      --text-light: #ffffff;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--background-dark);
+      color: var(--text-light);
+      margin: 0;
+      direction: rtl;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* النَبَر */
+    header {
+      background-color: var(--background-light);
+      padding: 20px 40px;
+      border-bottom: 2px solid var(--brand-primary);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo-img {
+      max-width: 100px;
+      height: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    #languageSwitcher {
+      display: flex;
+      gap: 10px;
+    }
+
+    .lang-btn {
+      padding: 8px 16px;
+      background-color: var(--background-light);
+      border: 2px solid var(--brand-primary);
+      color: var(--text-light);
+      font-weight: bold;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s, transform 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .lang-btn:hover, .lang-btn.active {
+      background-color: var(--brand-orange-dark);
+      color: var(--text-light);
+      transform: scale(1.05);
+    }
+
+    /* أيقونة العودة للـ Dashboard */
+    .dashboard-icon {
+      font-size: 1.8rem;
+      color: var(--brand-primary);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .dashboard-icon:hover {
+      color: var(--brand-orange-dark);
+    }
+
+    /* تصميم الكارد */
+    .form-container {
+      max-width: 600px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: linear-gradient(145deg, var(--background-light), var(--background-dark));
+      border: 2px solid var(--brand-primary);
+      border-radius: 15px;
+      box-shadow: 0 0 .5rem rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .form-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(246, 213, 92, 0.3);
+    }
+
+    /* العنوان */
+    h2 {
+      color: var(--brand-primary);
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* تنسيق النموذج */
+    .form-label {
+      color: var(--text-light);
+      font-weight: bold;
+    }
+
+    .form-control, .form-select {
+      background-color: var(--background-light);
+      color: var(--text-light);
+      border: 1px solid var(--brand-primary);
+      border-radius: 10px;
+      transition: border-color 0.3s;
+    }
+
+    .form-control:focus, .form-select:focus {
+      background-color: var(--background-light);
+      color: var(--text-light);
+      border-color: var(--brand-orange-dark);
+      box-shadow: 0 0 5px rgba(246, 213, 92, 0.5);
+    }
+
+    .form-control::placeholder {
+      color: var(--text-dark);
+    }
+
+    /* زر الإرسال */
+    .btn-primary {
+      background: linear-gradient(45deg, var(--brand-orange-dark), var(--brand-primary));
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      padding: 10px 20px;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(45deg, var(--brand-orange-hover), var(--brand-primary));
+      transform: scale(1.05);
+    }
+
+    .btn-primary:disabled {
+      background: linear-gradient(45deg, #555, #777);
+      cursor: not-allowed;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- النَبَر -->
+  <header>
+    <div class="nav-links d-flex align-items-center">
+      <img src="image/logo.jpg" alt="Gasco Logo" class="logo-img me-3">
+    </div>
+    <div class="dashboard-icon" onclick="location.href='dashboard.html'">
+      <i class="fas fa-tachometer-alt"></i>
+    </div>
+    <div id="languageSwitcher" class="d-flex align-items-center">
+      <button onclick="setLanguage('ar')" class="lang-btn me-2" id="btnArabic">العربية</button>
+      <button onclick="setLanguage('en')" class="lang-btn" id="btnEnglish">English</button>
+    </div>
+  </header>
+
+  <!-- النموذج -->
+  <div class="form-container">
+    <h2 id="pageTitle">إضافة بوتاجاز</h2>
+    <form id="stoveForm" enctype="multipart/form-data">
+      <input type="hidden" name="category" value="Stove">
+      <div class="mb-3">
+        <label class="form-label" id="nameLabel">الاسم</label>
+        <input type="text" name="name" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" id="descriptionLabel">الوصف</label>
+        <textarea name="description" class="form-control" rows="3" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" id="priceLabel">السعر</label>
+        <input type="number" name="price" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" id="imageLabel">الصورة</label>
+        <input type="file" name="Image" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" id="stockLabel">المخزون</label>
+        <input type="number" name="stock" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" id="typeLabel">النوع</label>
+        <select name="type" id="type" class="form-select" required>
+          <option value="" id="selectTypeOption">اختر النوع</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" id="energyTypeLabel">نوع الطاقة</label>
+        <select name="energyType" id="energyType" class="form-select" required>
+          <option value="" id="selectEnergyOption">اختر نوع الطاقة</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" id="safetyFeatureLabel">ميزة الأمان</label>
+        <select name="safetyFeature" id="safetyFeature" class="form-select" required>
+          <option value="" id="selectSafetyOption">اختر ميزة الأمان</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" id="materialLabel">المادة</label>
+        <select name="material" id="material" class="form-select" required>
+          <option value="" id="selectMaterialOption">اختر المادة</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary w-100" id="submitButton">إرسال</button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ترجمات اللغة
+    const translations = {
+      ar: {
+        title: "إضافة بوتاجاز - Gasco",
+        pageTitle: "إضافة بوتاجاز",
+        nameLabel: "الاسم",
+        descriptionLabel: "الوصف",
+        priceLabel: "السعر",
+        imageLabel: "الصورة",
+        stockLabel: "المخزون",
+        typeLabel: "النوع",
+        energyTypeLabel: "نوع الطاقة",
+        safetyFeatureLabel: "ميزة الأمان",
+        materialLabel: "المادة",
+        selectTypeOption: "اختر النوع",
+        selectEnergyOption: "اختر نوع الطاقة",
+        selectSafetyOption: "اختر ميزة الأمان",
+        selectMaterialOption: "اختر المادة",
+        submitButton: "إرسال",
+        unauthorizedMessage: "غير مصرح",
+        successMessage: "تمت إضافة البوتاجاز بنجاح!",
+        errorMessage: "حدث خطأ أثناء الإضافة"
+      },
+      en: {
+        title: "Add Stove - Gasco",
+        pageTitle: "Add Stove",
+        nameLabel: "Name",
+        descriptionLabel: "Description",
+        priceLabel: "Price",
+        imageLabel: "Image",
+        stockLabel: "Stock",
+        typeLabel: "Type",
+        energyTypeLabel: "Energy Type",
+        safetyFeatureLabel: "Safety Feature",
+        materialLabel: "Material",
+        selectTypeOption: "Select type",
+        selectEnergyOption: "Select energy type",
+        selectSafetyOption: "Select safety feature",
+        selectMaterialOption: "Select material",
+        submitButton: "Submit",
+        unauthorizedMessage: "Unauthorized",
+        successMessage: "Stove added successfully!",
+        errorMessage: "Something went wrong"
+      }
+    };
+
+    function setLanguage(lang) {
+      localStorage.setItem('lang', lang);
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+      document.title = translations[lang].title;
+
+      document.getElementById('pageTitle').textContent = translations[lang].pageTitle;
+      document.getElementById('nameLabel').textContent = translations[lang].nameLabel;
+      document.getElementById('descriptionLabel').textContent = translations[lang].descriptionLabel;
+      document.getElementById('priceLabel').textContent = translations[lang].priceLabel;
+      document.getElementById('imageLabel').textContent = translations[lang].imageLabel;
+      document.getElementById('stockLabel').textContent = translations[lang].stockLabel;
+      document.getElementById('typeLabel').textContent = translations[lang].typeLabel;
+      document.getElementById('energyTypeLabel').textContent = translations[lang].energyTypeLabel;
+      document.getElementById('safetyFeatureLabel').textContent = translations[lang].safetyFeatureLabel;
+      document.getElementById('materialLabel').textContent = translations[lang].materialLabel;
+      document.getElementById('selectTypeOption').textContent = translations[lang].selectTypeOption;
+      document.getElementById('selectEnergyOption').textContent = translations[lang].selectEnergyOption;
+      document.getElementById('selectSafetyOption').textContent = translations[lang].selectSafetyOption;
+      document.getElementById('selectMaterialOption').textContent = translations[lang].selectMaterialOption;
+      document.getElementById('submitButton').textContent = translations[lang].submitButton;
+
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      if (lang === 'ar') {
+        document.getElementById('btnArabic').classList.add('active');
+      } else {
+        document.getElementById('btnEnglish').classList.add('active');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedLang = localStorage.getItem('lang') || 'ar';
+      setLanguage(savedLang);
+
+      const OPTIONS_URL = 'https://gasco.vercel.app/product/options/dev';
+      const POST_URL = 'https://gasco.vercel.app/product/';
+      const token = localStorage.getItem('token');
+      const lang = localStorage.getItem('lang') || 'ar';
+
+      if (!token) {
+        alert(translations[lang].unauthorizedMessage);
+        window.location.href = 'login.html';
+      }
+
+      const form = document.getElementById('stoveForm');
+
+      fetch(OPTIONS_URL)
+        .then(res => res.json())
+        .then(data => {
+          const d = data.data;
+          d.stoveTypes.forEach(v => {
+            document.getElementById('type').add(new Option(v, v));
+          });
+          d.energyTypes.forEach(v => {
+            document.getElementById('energyType').add(new Option(v, v));
+          });
+          d.safetyLevels.forEach(v => {
+            document.getElementById('safetyFeature').add(new Option(v, v));
+          });
+          d.stoveMaterials.forEach(v => {
+            document.getElementById('material').add(new Option(v, v));
+          });
+        });
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const btn = form.querySelector('button');
+        btn.disabled = true;
+
+        fetch(POST_URL, {
+          method: 'POST',
+          headers: { token: token },
+          body: fd
+        })
+        .then(res => res.json().then(data => ({ ok: res.ok, data })))
+        .then(({ ok, data }) => {
+          if (!ok) throw new Error(data.message || translations[lang].errorMessage);
+          alert(translations[lang].successMessage);
+          form.reset();
+        })
+        .catch(err => {
+          alert('Error: ' + err.message);
+          console.error(err);
+        })
+        .finally(() => {
+          btn.disabled = false;
+        });
+      });
+    });
+  </script>
+</body>
+</html>

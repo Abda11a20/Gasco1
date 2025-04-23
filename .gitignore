@@ -1,0 +1,13 @@
+# مجلّدات Node (إن وجدت)
+node_modules/
+
+# ملفات بناء الإنتاج
+dist/
+build/
+
+# ملفات السجل
+*.log
+
+# ملفات نظام التشغيل
+.DS_Store
+Thumbs.db
