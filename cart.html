@@ -255,28 +255,14 @@
       color: var(--brand-orange-dark);
     }
 
-    .quantity-controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .quantity-controls span {
-      font-size: 1.1rem;
+    .quantity-input {
+      width: 60px;
+      text-align: center;
+      background-color: var(--background-light);
       color: var(--text-light);
-    }
-
-    .btn-outline-secondary {
-      color: var(--brand-primary);
-      border-color: var(--brand-primary);
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .btn-outline-secondary:hover {
-      background-color: var(--brand-orange-dark);
-      color: var(--text-light);
-      border-color: var(--brand-orange-dark);
+      border: 1px solid var(--brand-primary);
+      border-radius: 5px;
+      margin: 0 10px;
     }
 
     .btn-danger {
@@ -446,7 +432,9 @@
         modalTitle: "تفاصيل المنتج",
         modalPriceLabel: "السعر",
         modalImageAlt: "صورة المنتج",
-        closeBtn: "إغلاق"
+        closeBtn: "إغلاق",
+        updateSuccess: "تم تحديث الكميات بنجاح!",
+        updateFailed: "فشل في تحديث الكميات."
       },
       en: {
         title: "Shopping Cart - Gasco",
@@ -465,7 +453,9 @@
         modalTitle: "Product Details",
         modalPriceLabel: "Price",
         modalImageAlt: "Product Image",
-        closeBtn: "Close"
+        closeBtn: "Close",
+        updateSuccess: "Quantities updated successfully!",
+        updateFailed: "Failed to update quantities."
       }
     };
 
@@ -549,6 +539,9 @@
     // رابط Cart API
     const CART_URL = "https://gasco.vercel.app/cart";
 
+    // متغير لتخزين الكميات المحدثة مؤقتًا
+    let updatedQuantities = {};
+
     function loadCart() {
       fetch(CART_URL + '/', { headers: { token } })
         .then(res => res.ok ? res.json() : res.json().then(e => Promise.reject(e)))
@@ -571,6 +564,11 @@
             const subtotal = price * quantity;
             total += subtotal;
 
+            // تخزين الكمية الأولية في updatedQuantities
+            if (!(product._id in updatedQuantities)) {
+              updatedQuantities[product._id] = quantity;
+            }
+
             const div = document.createElement("div");
             div.className = "col-md-4 mb-4";
             div.innerHTML = `
@@ -580,9 +578,7 @@
                     ${product.name}
                   </span>
                   <div class="quantity-controls mt-3">
-                    <button class="btn btn-outline-secondary btn-sm" onclick="updateQuantity('${product._id}', ${quantity - 1})">➖</button>
-                    <span>${quantity}</span>
-                    <button class="btn btn-outline-secondary btn-sm" onclick="updateQuantity('${product._id}', ${quantity + 1})">➕</button>
+                    <input type="number" min="1" class="quantity-input" id="quantity-${product._id}" value="${updatedQuantities[product._id]}" onchange="updateQuantity('${product._id}', this.value)" />
                     <button class="btn btn-danger btn-sm" onclick="removeItem('${product._id}')">🗑</button>
                   </div>
                 </div>
@@ -606,30 +602,51 @@
       modal.show();
     }
 
-    // تحديث الكمية باستخدام PATCH
+    // تحديث الكمية محليًا فقط
     function updateQuantity(productId, newQty) {
-      if (newQty < 1) return;
-      fetch(CART_URL + '/', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          token
-        },
-        body: JSON.stringify({ productId, quantity: newQty })
-      })
-      .then(res => res.ok ? res.json() : res.json().then(e => Promise.reject(e)))
-      .then(json => {
-        alert(json.message);
-        // تحديث localStorage
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const existingProductIndex = cart.findIndex(item => item.productId === productId);
-        if (existingProductIndex !== -1) {
-          cart[existingProductIndex].quantity = newQty;
-        }
-        localStorage.setItem('cart', JSON.stringify(cart));
-        loadCart();
-      })
-      .catch(err => alert(`خطأ أثناء التحديث: ${err.message}`));
+      newQty = parseInt(newQty);
+      if (newQty < 1) {
+        document.getElementById(`quantity-${productId}`).value = 1;
+        newQty = 1;
+      }
+      updatedQuantities[productId] = newQty;
+
+      // تحديث localStorage
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const existingProductIndex = cart.findIndex(item => item.productId === productId);
+      if (existingProductIndex !== -1) {
+        cart[existingProductIndex].quantity = newQty;
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      // إعادة حساب الإجمالي دون تحديث السيرفر
+      recalculateTotal();
+    }
+
+    // إعادة حساب الإجمالي بناءً على الكميات المحدثة
+    function recalculateTotal() {
+      fetch(CART_URL + '/', { headers: { token } })
+        .then(res => res.ok ? res.json() : res.json().then(e => Promise.reject(e)))
+        .then(data => {
+          const cart = data.data;
+          let total = 0;
+          const lang = localStorage.getItem('lang') || 'ar';
+
+          if (cart && cart.products && cart.products.length > 0) {
+            cart.products.forEach(item => {
+              const product = item.productId;
+              const quantity = updatedQuantities[product._id] || item.quantity || 1;
+              const price = product.price || 0;
+              total += price * quantity;
+            });
+          }
+
+          totalContainer.textContent = `${translations[lang].totalLabel}: ${total} EGP`;
+          updateCartCount();
+        })
+        .catch(err => {
+          console.error("Error recalculating total:", err);
+        });
     }
 
     // حذف عنصر من العربة
@@ -644,13 +661,43 @@
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         cart = cart.filter(item => item.productId !== productId);
         localStorage.setItem('cart', JSON.stringify(cart));
+        // إزالة المنتج من updatedQuantities
+        delete updatedQuantities[productId];
         loadCart();
       })
       .catch(err => alert(`خطأ أثناء الحذف: ${err.message}`));
     }
 
+    // إرسال الكميات المحدثة عند النقر على "متابعة للشراء"
     function proceedToCheckout() {
-      window.location.href = "checkout.html";
+      const lang = localStorage.getItem('lang') || 'ar';
+      const updates = Object.keys(updatedQuantities).map(productId => ({
+        productId,
+        quantity: updatedQuantities[productId]
+      }));
+
+      if (updates.length === 0) {
+        window.location.href = "checkout.html";
+        return;
+      }
+
+      // إرسال جميع التحديثات في طلب واحد
+      fetch(CART_URL + '/update-multiple', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          token
+        },
+        body: JSON.stringify({ updates })
+      })
+      .then(res => res.ok ? res.json() : res.json().then(e => Promise.reject(e)))
+      .then(json => {
+        alert(translations[lang].updateSuccess);
+        window.location.href = "checkout.html";
+      })
+      .catch(err => {
+        alert(`${translations[lang].updateFailed}: ${err.message}`);
+      });
     }
 
     if (!token) {
