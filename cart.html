@@ -625,17 +625,19 @@
 
     // إعادة حساب الإجمالي بناءً على الكميات المحدثة
     function recalculateTotal() {
+      let total = 0;
+      const lang = localStorage.getItem('lang') || 'ar';
+
       fetch(CART_URL + '/', { headers: { token } })
         .then(res => res.ok ? res.json() : res.json().then(e => Promise.reject(e)))
         .then(data => {
           const cart = data.data;
-          let total = 0;
-          const lang = localStorage.getItem('lang') || 'ar';
 
           if (cart && cart.products && cart.products.length > 0) {
             cart.products.forEach(item => {
               const product = item.productId;
-              const quantity = updatedQuantities[product._id] || item.quantity || 1;
+              // استخدام الكمية من updatedQuantities إذا كانت موجودة، وإلا استخدام الكمية الأصلية
+              const quantity = updatedQuantities[product._id] !== undefined ? updatedQuantities[product._id] : (item.quantity || 1);
               const price = product.price || 0;
               total += price * quantity;
             });
@@ -681,17 +683,25 @@
         return;
       }
 
-      // إرسال جميع التحديثات في طلب واحد
-      fetch(CART_URL + '/update-multiple', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          token
-        },
-        body: JSON.stringify({ updates })
-      })
-      .then(res => res.ok ? res.json() : res.json().then(e => Promise.reject(e)))
-      .then(json => {
+      // إرسال طلبات منفصلة لكل منتج
+      Promise.all(updates.map(update =>
+        fetch(CART_URL + '/', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            token
+          },
+          body: JSON.stringify({ productId: update.productId, quantity: update.quantity })
+        })
+        .then(res => {
+          const contentType = res.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Unexpected response format');
+          }
+          return res.ok ? res.json() : res.json().then(e => Promise.reject(e));
+        })
+      ))
+      .then(() => {
         alert(translations[lang].updateSuccess);
         window.location.href = "checkout.html";
       })
