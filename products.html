@@ -427,6 +427,84 @@
       }
     }
 
+    // تعريف الدالة openEditModal في النطاق العام
+    let editModal; // لتخزين مثيل Modal خارج النطاق
+
+    function openEditModal(id, name, category, price, stock) {
+      // Populate the edit form with current product data
+      document.getElementById('productName').value = name;
+      document.getElementById('productCategory').value = category;
+      document.getElementById('productPrice').value = price;
+      document.getElementById('productStock').value = stock;
+
+      // Show the modal
+      editModal.show();
+
+      // Handle form submission for editing
+      const editForm = document.getElementById('editForm');
+      const lang = localStorage.getItem('lang') || 'ar';
+      const token = localStorage.getItem('token');
+      const API_URL = 'https://gasco.vercel.app/product';
+
+      editForm.onsubmit = function(e) {
+        e.preventDefault();
+        const updatedProduct = {
+          name: document.getElementById('productName').value,
+          category: document.getElementById('productCategory').value,
+          price: document.getElementById('productPrice').value,
+          stock: document.getElementById('productStock').value,
+        };
+
+        fetch(`${API_URL}/${id}`, {
+          method: 'PUT',
+          headers: {
+            token: token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updatedProduct)
+        })
+        .then(res => {
+          if (!res.ok) {
+            throw new Error(translations[lang].updateErrorMessage);
+          }
+          return res.json();
+        })
+        .then(() => {
+          alert(translations[lang].updateSuccessMessage);
+          location.reload(); // Reload page to refresh product list
+        })
+        .catch(err => alert(translations[lang].updateErrorMessage + err.message));
+      };
+    }
+
+    // تعريف الدالة confirmDelete في النطاق العام
+    window.confirmDelete = function(id) {
+      const lang = localStorage.getItem('lang') || 'ar';
+      const token = localStorage.getItem('token');
+      const API_URL = 'https://gasco.vercel.app/product';
+
+      if (confirm(translations[lang].deleteConfirmMessage)) {
+        fetch(`${API_URL}/${id}`, {
+          method: 'DELETE',
+          headers: {
+            token: token,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res => {
+          if (!res.ok) {
+            throw new Error(translations[lang].deleteErrorMessage);
+          }
+          return res.json();
+        })
+        .then(() => {
+          alert(translations[lang].deleteSuccessMessage);
+          location.reload(); // Reload page to refresh product list
+        })
+        .catch(err => alert(translations[lang].deleteErrorMessage + err.message));
+      }
+    };
+
     document.addEventListener('DOMContentLoaded', function() {
       const token = localStorage.getItem('token');
       const lang = localStorage.getItem('lang') || 'ar';
@@ -439,8 +517,7 @@
 
       const API_URL = 'https://gasco.vercel.app/product';
       const tbody = document.getElementById('productsBody');
-      const editModal = new bootstrap.Modal(document.getElementById('editModal'));
-      const editForm = document.getElementById('editForm');
+      editModal = new bootstrap.Modal(document.getElementById('editModal')); // تهيئة Modal
 
       fetch(API_URL, {
         headers: {
@@ -481,70 +558,6 @@
         console.error('Error loading products:', err);
         alert(translations[lang].fetchErrorMessage + err.message);
       });
-
-      function openEditModal(id, name, category, price, stock) {
-        // Populate the edit form with current product data
-        document.getElementById('productName').value = name;
-        document.getElementById('productCategory').value = category;
-        document.getElementById('productPrice').value = price;
-        document.getElementById('productStock').value = stock;
-
-        // Show the modal
-        editModal.show();
-
-        // Handle form submission for editing
-        editForm.onsubmit = function(e) {
-          e.preventDefault();
-          const updatedProduct = {
-            name: document.getElementById('productName').value,
-            category: document.getElementById('productCategory').value,
-            price: document.getElementById('productPrice').value,
-            stock: document.getElementById('productStock').value,
-          };
-
-          fetch(`${API_URL}/${id}`, {
-            method: 'PUT',
-            headers: {
-              token:  token,
-              'Content-Type': 'application/json'
-            }
-          })
-          .then(res => {
-            if (!res.ok) {
-              throw new Error(translations[lang].updateErrorMessage);
-            }
-            return res.json();
-          })
-          .then(() => {
-            alert(translations[lang].updateSuccessMessage);
-            location.reload(); // Reload page to refresh product list
-          })
-          .catch(err => alert(translations[lang].updateErrorMessage + err.message));
-        };
-      }
-
-      window.confirmDelete = function(id) {
-        if (confirm(translations[lang].deleteConfirmMessage)) {
-          fetch(`${API_URL}/${id}`, {
-            method: 'DELETE',
-            headers: {
-              token:  token,
-              'Content-Type': 'application/json'
-            }
-          })
-          .then(res => {
-            if (!res.ok) {
-              throw new Error(translations[lang].deleteErrorMessage);
-            }
-            return res.json();
-          })
-          .then(() => {
-            alert(translations[lang].deleteSuccessMessage);
-            location.reload(); // Reload page to refresh product list
-          })
-          .catch(err => alert(translations[lang].deleteErrorMessage + err.message));
-        }
-      };
     });
   </script>
 </body>

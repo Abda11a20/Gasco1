@@ -577,9 +577,7 @@
       } else {
         document.getElementById('btnEnglish').classList.add('active');
       }
-
-      // إعادة تحميل المنتجات لتحديث نصوص الأزرار
-      loadProducts();
+      // إزالة استدعاء loadProducts من هنا لتجنب التكرار
     }
 
     // دالة للتحقق من دور المستخدم وإخفاء رابط لوحة التحكم إذا لم يكن admin

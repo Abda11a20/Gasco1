@@ -380,7 +380,20 @@
         notAuthorized: "غير مصرح لك. الرجاء تسجيل الدخول.",
         noDescription: "لا يوجد وصف متاح.",
         successAddToCart: "✅ تمت إضافة المنتج إلى السلة بنجاح!",
-        failedAddToCart: "❌ فشل في إضافة المنتج إلى السلة."
+        failedAddToCart: "❌ فشل في إضافة المنتج إلى السلة.",
+        // حقول إضافية للبوتاجازات
+        typeLabel: "النوع",
+        energyTypeLabel: "نوع الطاقة",
+        numberOfBurnersLabel: "عدد الشعلات",
+        safetyFeatureLabel: "ميزة الأمان",
+        materialLabel: "الخامة",
+        // حقول إضافية للميكروويف
+        capacityLabel: "السعة",
+        controlTypeLabel: "نوع التحكم",
+        hasGrillFunctionLabel: "وظيفة الشواية",
+        // حقول أخرى
+        createdAtLabel: "تاريخ الإنشاء",
+        updatedAtLabel: "تاريخ التحديث"
       },
       en: {
         title: "Product Details - Gasco",
@@ -401,7 +414,20 @@
         notAuthorized: "You are not authorized. Please login.",
         noDescription: "No description available.",
         successAddToCart: "✅ Product added to cart successfully!",
-        failedAddToCart: "❌ Failed to add product to cart."
+        failedAddToCart: "❌ Failed to add product to cart.",
+        // حقول إضافية للبوتاجازات
+        typeLabel: "Type",
+        energyTypeLabel: "Energy Type",
+        numberOfBurnersLabel: "Number of Burners",
+        safetyFeatureLabel: "Safety Feature",
+        materialLabel: "Material",
+        // حقول إضافية للميكروويف
+        capacityLabel: "Capacity",
+        controlTypeLabel: "Control Type",
+        hasGrillFunctionLabel: "Grill Function",
+        // حقول أخرى
+        createdAtLabel: "Created At",
+        updatedAtLabel: "Updated At"
       }
     };
 
@@ -489,7 +515,8 @@
           const product = data.data;
           const imageUrl = product.Image?.secure_url || 'https://via.placeholder.com/400x300?text=No+Image';
 
-          const html = `
+          // تفاصيل عامة
+          let html = `
             <div class="col-md-6 offset-md-3">
               <div class="card">
                 <img src="${imageUrl}" class="card-img-top" alt="${product.name}" />
@@ -499,7 +526,33 @@
                   <p class="card-text"><strong>${translations[lang].priceLabel}:</strong> ${product.price} EGP</p>
                   <p class="card-text"><strong>${translations[lang].stockLabel}:</strong> ${product.stock}</p>
                   <p class="card-text"><strong>${translations[lang].descriptionLabel}:</strong> ${product.description || translations[lang].noDescription}</p>
-                  <button id="addToCartBtn" class="btn btn-success mt-3">${translations[lang].addToCartBtn}</button>
+          `;
+
+          // تفاصيل إضافية بناءً على الفئة
+          if (product.category === 'Stove') {
+            html += `
+              <p class="card-text"><strong>${translations[lang].typeLabel}:</strong> ${product.type || 'غير محدد'}</p>
+              <p class="card-text"><strong>${translations[lang].energyTypeLabel}:</strong> ${product.energyType || 'غير محدد'}</p>
+              <p class="card-text"><strong>${translations[lang].numberOfBurnersLabel}:</strong> ${product.numberOfBurners || 'غير محدد'}</p>
+              <p class="card-text"><strong>${translations[lang].safetyFeatureLabel}:</strong> ${product.safetyFeature || 'غير محدد'}</p>
+              <p class="card-text"><strong>${translations[lang].materialLabel}:</strong> ${product.material || 'غير محدد'}</p>
+            `;
+          } else if (product.category === 'Microwave') {
+            html += `
+              <p class="card-text"><strong>${translations[lang].capacityLabel}:</strong> ${product.capacity || 'غير محدد'}</p>
+              <p class="card-text"><strong>${translations[lang].controlTypeLabel}:</strong> ${product.controlType || 'غير محدد'}</p>
+              <p class="card-text"><strong>${translations[lang].hasGrillFunctionLabel}:</strong> ${product.hasGrillFunction ? 'نعم' : 'لا'}</p>
+            `;
+          }
+
+          // تفاصيل أخرى
+          html += `
+            <p class="card-text"><strong>${translations[lang].createdAtLabel}:</strong> ${new Date(product.createdAt).toLocaleString()}</p>
+            <p class="card-text"><strong>${translations[lang].updatedAtLabel}:</strong> ${new Date(product.updatedAt).toLocaleString()}</p>
+            <button id="addToCartBtn" class="btn btn-success mt-3">${translations[lang].addToCartBtn}</button>
+          `;
+
+          html += `
                 </div>
               </div>
             </div>
