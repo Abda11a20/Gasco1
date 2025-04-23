@@ -390,10 +390,7 @@
         // حقول إضافية للميكروويف
         capacityLabel: "السعة",
         controlTypeLabel: "نوع التحكم",
-        hasGrillFunctionLabel: "وظيفة الشواية",
-        // حقول أخرى
-        createdAtLabel: "تاريخ الإنشاء",
-        updatedAtLabel: "تاريخ التحديث"
+        hasGrillFunctionLabel: "وظيفة الشواية"
       },
       en: {
         title: "Product Details - Gasco",
@@ -424,10 +421,7 @@
         // حقول إضافية للميكروويف
         capacityLabel: "Capacity",
         controlTypeLabel: "Control Type",
-        hasGrillFunctionLabel: "Grill Function",
-        // حقول أخرى
-        createdAtLabel: "Created At",
-        updatedAtLabel: "Updated At"
+        hasGrillFunctionLabel: "Grill Function"
       }
     };
 
@@ -545,10 +539,8 @@
             `;
           }
 
-          // تفاصيل أخرى
+          // إضافة زر "إضافة إلى السلة"
           html += `
-            <p class="card-text"><strong>${translations[lang].createdAtLabel}:</strong> ${new Date(product.createdAt).toLocaleString()}</p>
-            <p class="card-text"><strong>${translations[lang].updatedAtLabel}:</strong> ${new Date(product.updatedAt).toLocaleString()}</p>
             <button id="addToCartBtn" class="btn btn-success mt-3">${translations[lang].addToCartBtn}</button>
           `;
 
